@@ -66,8 +66,15 @@ class AccountTest extends TestCase
         $response = $this->postJson('/api/conta', $data);
 
         $response->assertStatus(422)
-        ->assertJsonStructure(['errors' => ['valor']]);
-        
+        ->assertJsonStructure(['errors' => ['valor']])
+        ->assertJsonFragment([
+            'errors' => [
+                'valor' => [
+                    'The valor field must be at least 0.'
+                ]
+            ]
+        ]);
+
     }
 
 }

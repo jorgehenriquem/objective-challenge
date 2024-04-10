@@ -27,7 +27,7 @@ class AccountController extends Controller
 
         $validator = Validator::make($request->all(), [
             'conta_id' => 'required|integer|unique:accounts',
-            'valor' => 'required|numeric',
+            'valor' => 'required|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
