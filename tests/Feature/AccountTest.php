@@ -44,7 +44,15 @@ class AccountTest extends TestCase
         ];
         $response = $this->postJson('/api/conta', $data);
 
-        $response->assertStatus(422);
+        $response->assertStatus(422)
+        ->assertJsonStructure(['errors' => ['conta_id']])
+        ->assertJsonFragment([
+            'errors' => [
+                'conta_id' => [
+                    'The conta id has already been taken.'
+                ]
+            ]
+        ]);
 
     }
 

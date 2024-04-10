@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\AccountService;
+use Illuminate\Support\Facades\Validator;
+
 
 class AccountController extends Controller
 {
@@ -22,13 +24,18 @@ class AccountController extends Controller
      */
     public function createAccountWithBalance(Request $request)
     {
-        $validatedData = $request->validate([
-            'conta_id' => 'required|integer',
-            'valor' => 'required|numeric',
-        ]); //@TODO add a new interface for this validation
 
-        $conta_id = $validatedData['conta_id'];
-        $valor = $validatedData['valor'];
+        $validator = Validator::make($request->all(), [
+            'conta_id' => 'required|integer|unique:accounts',
+            'valor' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $conta_id = $request['conta_id'];
+        $valor = $request['valor'];
 
         $account = $this->accountService->createAccountWithBalance($conta_id, $valor);
 
