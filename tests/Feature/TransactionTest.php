@@ -7,6 +7,7 @@ use Tests\TestCase;
 use Faker\Factory as Faker;
 use App\Models\Account;
 use Database\Factories\AccountFactory;
+use App\Enums\PaymentMethod;
 
 
 class TransactionTest extends TestCase
@@ -19,7 +20,7 @@ class TransactionTest extends TestCase
         $faker = Faker::create();
         $transactionValue = $faker->randomFloat(2, 0, $account->saldo - 1);
         $data = [
-            'forma_pagamento' => 'P',
+            'forma_pagamento' => PaymentMethod::PIX,
             'conta_id' => $account->conta_id,
             'valor' =>  $transactionValue
         ];
@@ -45,7 +46,7 @@ class TransactionTest extends TestCase
         $faker = Faker::create();
         $transactionValue = $faker->randomFloat(2, 0, $account->saldo - 1);
         $data = [
-            'forma_pagamento' => 'C',
+            'forma_pagamento' => PaymentMethod::CREDIT_CARD,
             'conta_id' => $account->conta_id,
             'valor' =>  $transactionValue
         ];
@@ -72,7 +73,7 @@ class TransactionTest extends TestCase
         $faker = Faker::create();
         $transactionValue = $faker->randomFloat(2, 0, $account->saldo - 1);
         $data = [
-            'forma_pagamento' => 'D',
+            'forma_pagamento' =>  PaymentMethod::DEBIT_CARD,
             'conta_id' => $account->conta_id,
             'valor' =>  $transactionValue
         ];

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Account;
+use App\Enums\PaymentMethod;
 
 class TransactionService
 {
@@ -47,11 +48,11 @@ class TransactionService
     private function getFinalAmountFeeByPaymentMethod($paymentMethod, $amount)
     {
         switch ($paymentMethod) {
-            case 'P':
+            case PaymentMethod::PIX:
                 return $amount;
-            case 'C':
+            case PaymentMethod::CREDIT_CARD:
                 return $amount - ($amount * 0.05);
-            case 'D':
+            case PaymentMethod::DEBIT_CARD:
                 return $amount - ($amount * 0.03);
             default:
                 throw new \InvalidArgumentException("Invalid payment method: $paymentMethod");
