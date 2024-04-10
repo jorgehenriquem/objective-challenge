@@ -9,6 +9,7 @@ use Faker\Factory as Faker;
 
 class AccountTest extends TestCase
 {
+    use RefreshDatabase;
 
     public function test_create_account_a_successful_response(): void
     {
