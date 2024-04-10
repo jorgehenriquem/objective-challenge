@@ -61,7 +61,7 @@ class AccountTest extends TestCase
         $faker = Faker::create();
         $data = [
             'conta_id' => $faker->randomNumber(5),
-            'valor' =>  $faker->randomFloat(2, -1000, 1000)
+            'valor' =>  $faker->randomFloat(2, -1000, -0.01)
         ];
         $response = $this->postJson('/api/conta', $data);
 
