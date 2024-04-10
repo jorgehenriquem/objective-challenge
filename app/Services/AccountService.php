@@ -16,4 +16,10 @@ class AccountService
 
         return $account;
     }
+
+    public function findAccount($id)
+    {
+        return Account::find($id);
+    }
+    
 }

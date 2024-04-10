@@ -82,13 +82,12 @@ class AccountTest extends TestCase
         $account = Account::factory()->create();
 
         $response = $this->get('/api/conta/?id=' . $account->conta_id);
-        
+
         $response->assertStatus(200)
         ->assertJson([
             'conta_id' => $account->conta_id,
             'saldo' => $account->saldo
         ]);
-
 
     }
 

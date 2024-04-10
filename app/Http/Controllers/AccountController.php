@@ -46,4 +46,23 @@ class AccountController extends Controller
 
         return response()->json($response, 201);
     }
+
+    /**
+     * Display the details of an account.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showAccount(Request $request)
+    {
+        $accountId = $request->query('id');
+
+        $account = $this->accountService->findAccount($accountId);
+
+        if (!$account) {
+            return response()->json(['error' => 'Account not found'], 404);
+        }
+
+        return response()->json($account);
+    }
 }
