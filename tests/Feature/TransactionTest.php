@@ -23,11 +23,11 @@ class TransactionTest extends TestCase
             'conta_id' => $account->conta_id,
             'valor' =>  $transactionValue
         ];
-        $newBalanceValidation = $account->saldo - $newValue;
+        $newBalanceValidation = number_format($account->saldo - $transactionValue, 2);
 
         $response = $this->postJson('/api/transacao', $data);
 
-        $response->assertStatus(201)
+        $response->assertStatus(200)
         ->assertJson([
             'conta_id' => $data['conta_id'],
             'saldo' => $newBalanceValidation
