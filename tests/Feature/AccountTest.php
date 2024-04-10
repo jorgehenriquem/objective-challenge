@@ -77,4 +77,19 @@ class AccountTest extends TestCase
 
     }
 
+    public function test_visualize_account_with_a_successful_response(): void
+    {
+        $account = Account::factory()->create();
+
+        $response = $this->get('/api/conta/?id=' . $account->conta_id);
+        
+        $response->assertStatus(200)
+        ->assertJson([
+            'conta_id' => $account->conta_id,
+            'saldo' => $account->saldo
+        ]);
+
+
+    }
+
 }
