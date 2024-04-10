@@ -91,4 +91,18 @@ class AccountTest extends TestCase
 
     }
 
+    public function test_visualize_inexisting_account_with_a_error_response(): void
+    {
+        $faker = Faker::create();
+        
+        $response = $this->get('/api/conta/?id=' . $faker->randomNumber(5));
+
+        $response->assertStatus(404)
+        ->assertJsonFragment([
+            'errors' => [
+                    'Account not found'
+                ]
+            ]);
+    }
+
 }

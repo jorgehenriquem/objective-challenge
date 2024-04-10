@@ -60,7 +60,7 @@ class AccountController extends Controller
         $account = $this->accountService->findAccount($accountId);
 
         if (!$account) {
-            return response()->json(['error' => 'Account not found'], 404);
+            return response()->json(['errors' => ['Account not found']], 404);
         }
 
         return response()->json($account);
