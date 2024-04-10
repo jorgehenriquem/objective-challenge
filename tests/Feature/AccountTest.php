@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Faker\Factory as Faker;
 
@@ -20,10 +20,15 @@ class AccountTest extends TestCase
         $response = $this->postJson('/api/conta', $data);
 
         $response->assertStatus(201)
-        ->assertJsonStructure([
-            'conta_id',
-            'saldo'
-         ]);
+        ->assertJson([
+            'conta_id' => $data['conta_id'],
+            'saldo' => $data['valor']
+        ]);
+
+        $this->assertDatabaseHas('accounts', [
+            'conta_id' => $data['conta_id'],
+            'saldo' => $data['valor']
+        ]);
     }
 
 }
