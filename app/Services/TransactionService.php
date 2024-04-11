@@ -24,9 +24,6 @@ class TransactionService
             $finalAmount = $this->getFinalAmountFeeByPaymentMethod($data['forma_pagamento'], $data['valor']);
     
             $account = Account::where('conta_id', $data['conta_id'])->first();
-            if (!$account) {
-                throw new \InvalidArgumentException('Account not found', 404);
-            }
     
             $account->saldo = $account->saldo - $finalAmount;
             $account->save();
