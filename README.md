@@ -39,6 +39,8 @@ To install dependencies and set up the environment, follow these steps:
 1. **Docker**:
 
     - 🧪 Run the command `docker exec -it objective-challenge-laravel.test-1 php artisan test`.
+    - 🧪 Run the command `docker exec -it objective-challenge-laravel.test-1 ./vendor/bin/phpunit --coverage-html coverage` to check a coverage.
 
 2. **Laravel Sail**:
-    - 🧪 Run the command `./vendor/bin/sail up -d php artisan test`.
+    - 🧪 Run the command `./vendor/bin/sail php artisan test`.
+    - 🧪 Run the command `./vendor/bin/sail ./vendor/bin/phpunit --coverage-html coverage` to check a coverage.
