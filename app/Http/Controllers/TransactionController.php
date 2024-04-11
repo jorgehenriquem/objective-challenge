@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\TransactionService;
-use Illuminate\Support\Facades\Validator;
-
 
 class TransactionController extends Controller
 {
