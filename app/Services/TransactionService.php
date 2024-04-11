@@ -18,14 +18,14 @@ class TransactionService
     {
         try {
             if (!$this->isAmountLessThanAccountBalance($data['conta_id'], $data['valor'])) {
-                throw new \InvalidArgumentException('The transaction amount exceeds the account balance.');
+                throw new \InvalidArgumentException('The transaction amount exceeds the account balance.', 422);
             }
     
             $finalAmount = $this->getFinalAmountFeeByPaymentMethod($data['forma_pagamento'], $data['valor']);
     
             $account = Account::where('conta_id', $data['conta_id'])->first();
             if (!$account) {
-                throw new \InvalidArgumentException('Account not found');
+                throw new \InvalidArgumentException('Account not found', 404);
             }
     
             $account->saldo = $account->saldo - $finalAmount;
@@ -33,7 +33,7 @@ class TransactionService
     
             return $account;
         } catch (\InvalidArgumentException $e) {
-            throw new \InvalidArgumentException($e->getMessage());
+            throw new \InvalidArgumentException($e->getMessage(), $e->getCode());
         }
     }
 
@@ -55,7 +55,7 @@ class TransactionService
             case PaymentMethod::DEBIT_CARD:
                 return $amount - ($amount * 0.03);
             default:
-                throw new \InvalidArgumentException("Invalid payment method: $paymentMethod");
+                throw new \InvalidArgumentException("Invalid payment method: $paymentMethod", 422);
         }
     }
 
@@ -71,7 +71,7 @@ class TransactionService
     {
         $account = Account::where('conta_id', $accountId)->first();
         if (!$account) {
-            throw new \InvalidArgumentException('Account not found');
+            throw new \InvalidArgumentException('Account not found', 404);
         }
 
         return $amount <= $account->saldo;

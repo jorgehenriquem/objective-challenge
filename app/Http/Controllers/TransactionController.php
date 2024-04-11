@@ -34,7 +34,7 @@ class TransactionController extends Controller
     
             return response()->json($response);
         } catch (\InvalidArgumentException $e) {
-            return response()->json(['errors' => $e->getMessage()], 422);
+            return response()->json(['errors' => $e->getMessage()], $e->getCode());
         }
     }
 }
