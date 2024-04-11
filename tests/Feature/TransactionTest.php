@@ -137,4 +137,22 @@ class TransactionTest extends TestCase
         ->assertJsonFragment(['errors' =>'The transaction amount exceeds the account balance.']);
     }
 
+    public function test_transaction_a_invalid_payment_method_with_a_error_response(): void
+    {
+        $account = Account::factory()->create();
+        $faker = Faker::create();
+        $randomWord = $faker->regexify('[A-Za-z]{2,3}');
+        $randomPaymentMethod = $randomWord;
+        $data = [
+            'forma_pagamento' => $randomPaymentMethod,
+            'conta_id' => $account->conta_id,
+            'valor' =>  $account->saldo
+        ];
+
+        $response = $this->postJson('/api/transacao', $data);
+
+        $response->assertStatus(422)
+        ->assertJsonFragment(['errors' =>'Invalid payment method: '.$randomWord]);
+    }
+
 }
