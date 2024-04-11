@@ -2,6 +2,12 @@
 
 namespace App\Enums;
 
+/**
+ * Class PaymentMethod
+ * Enumeration class for payment methods.
+ *
+ * @package App\Enums
+ */
 abstract class PaymentMethod
 {
     const PIX = 'P';
