@@ -6,8 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Faker\Factory as Faker;
 use App\Models\Account;
-use Database\Factories\AccountFactory;
-
 
 class AccountTest extends TestCase
 {
