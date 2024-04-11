@@ -94,4 +94,47 @@ class TransactionTest extends TestCase
         ]);
     }
 
+    public function test_transaction_a_inexisting_account_with_a_error_response(): void
+    {
+        $faker = Faker::create();
+        $randomPaymentMethod = $faker->randomElement([
+            PaymentMethod::PIX,
+            PaymentMethod::CREDIT_CARD,
+            PaymentMethod::DEBIT_CARD,
+        ]);
+        $transactionValue = $faker->randomFloat(2, 0);
+        $data = [
+            'forma_pagamento' => $randomPaymentMethod,
+            'conta_id' => $faker->randomNumber(5),
+            'valor' =>  $transactionValue
+        ];
+
+        $response = $this->postJson('/api/transacao', $data);
+
+        $response->assertStatus(404)
+        ->assertJsonFragment(['errors' =>'Account not found']);
+    }
+
+    public function test_transaction_a_insuficient_amount_with_a_error_response(): void
+    {
+        $account = Account::factory()->create();
+        $faker = Faker::create();
+        $randomPaymentMethod = $faker->randomElement([
+            PaymentMethod::PIX,
+            PaymentMethod::CREDIT_CARD,
+            PaymentMethod::DEBIT_CARD,
+        ]);
+        $insuficientTransactionValue = $faker->randomFloat(2, $account->saldo + 0.01, $account->saldo + 1000);
+        $data = [
+            'forma_pagamento' => $randomPaymentMethod,
+            'conta_id' => $account->conta_id,
+            'valor' =>  $insuficientTransactionValue
+        ];
+
+        $response = $this->postJson('/api/transacao', $data);
+
+        $response->assertStatus(422)
+        ->assertJsonFragment(['errors' =>'The transaction amount exceeds the account balance.']);
+    }
+
 }
