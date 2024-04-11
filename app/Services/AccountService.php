@@ -21,5 +21,5 @@ class AccountService
     {
         return Account::find($id);
     }
-    
+
 }

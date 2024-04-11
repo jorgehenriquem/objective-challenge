@@ -22,17 +22,17 @@ class TransactionTest extends TestCase
         $data = [
             'forma_pagamento' => PaymentMethod::PIX,
             'conta_id' => $account->conta_id,
-            'valor' =>  $transactionValue
+            'valor' => $transactionValue
         ];
         $newBalanceValidation = number_format($account->saldo - $transactionValue, 2);
 
         $response = $this->postJson('/api/transacao', $data);
 
         $response->assertStatus(200)
-        ->assertJson([
-            'conta_id' => $data['conta_id'],
-            'saldo' => $newBalanceValidation
-        ]);
+            ->assertJson([
+                'conta_id' => $data['conta_id'],
+                'saldo' => $newBalanceValidation
+            ]);
 
         $this->assertDatabaseHas('accounts', [
             'conta_id' => $data['conta_id'],
@@ -48,7 +48,7 @@ class TransactionTest extends TestCase
         $data = [
             'forma_pagamento' => PaymentMethod::CREDIT_CARD,
             'conta_id' => $account->conta_id,
-            'valor' =>  $transactionValue
+            'valor' => $transactionValue
         ];
         $finalAmount = $transactionValue - ($transactionValue * 0.05);
         $newBalanceValidation = number_format($account->saldo - $finalAmount, 2);
@@ -56,10 +56,10 @@ class TransactionTest extends TestCase
         $response = $this->postJson('/api/transacao', $data);
 
         $response->assertStatus(200)
-        ->assertJson([
-            'conta_id' => $data['conta_id'],
-            'saldo' => $newBalanceValidation
-        ]);
+            ->assertJson([
+                'conta_id' => $data['conta_id'],
+                'saldo' => $newBalanceValidation
+            ]);
 
         $this->assertDatabaseHas('accounts', [
             'conta_id' => $data['conta_id'],
@@ -73,9 +73,9 @@ class TransactionTest extends TestCase
         $faker = Faker::create();
         $transactionValue = $faker->randomFloat(2, 0, $account->saldo - 1);
         $data = [
-            'forma_pagamento' =>  PaymentMethod::DEBIT_CARD,
+            'forma_pagamento' => PaymentMethod::DEBIT_CARD,
             'conta_id' => $account->conta_id,
-            'valor' =>  $transactionValue
+            'valor' => $transactionValue
         ];
         $finalAmount = $transactionValue - ($transactionValue * 0.03);
         $newBalanceValidation = number_format($account->saldo - $finalAmount, 2);
@@ -83,10 +83,10 @@ class TransactionTest extends TestCase
         $response = $this->postJson('/api/transacao', $data);
 
         $response->assertStatus(200)
-        ->assertJson([
-            'conta_id' => $data['conta_id'],
-            'saldo' => $newBalanceValidation
-        ]);
+            ->assertJson([
+                'conta_id' => $data['conta_id'],
+                'saldo' => $newBalanceValidation
+            ]);
 
         $this->assertDatabaseHas('accounts', [
             'conta_id' => $data['conta_id'],
@@ -106,13 +106,13 @@ class TransactionTest extends TestCase
         $data = [
             'forma_pagamento' => $randomPaymentMethod,
             'conta_id' => $faker->randomNumber(5),
-            'valor' =>  $transactionValue
+            'valor' => $transactionValue
         ];
 
         $response = $this->postJson('/api/transacao', $data);
 
         $response->assertStatus(404)
-        ->assertJsonFragment(['errors' =>'Account not found']);
+            ->assertJsonFragment(['errors' => 'Account not found']);
     }
 
     public function test_transaction_a_insuficient_amount_with_a_error_response(): void
@@ -128,13 +128,13 @@ class TransactionTest extends TestCase
         $data = [
             'forma_pagamento' => $randomPaymentMethod,
             'conta_id' => $account->conta_id,
-            'valor' =>  $insuficientTransactionValue
+            'valor' => $insuficientTransactionValue
         ];
 
         $response = $this->postJson('/api/transacao', $data);
 
         $response->assertStatus(422)
-        ->assertJsonFragment(['errors' =>'The transaction amount exceeds the account balance.']);
+            ->assertJsonFragment(['errors' => 'The transaction amount exceeds the account balance.']);
     }
 
     public function test_transaction_a_invalid_payment_method_with_a_error_response(): void
@@ -146,13 +146,13 @@ class TransactionTest extends TestCase
         $data = [
             'forma_pagamento' => $randomPaymentMethod,
             'conta_id' => $account->conta_id,
-            'valor' =>  $account->saldo
+            'valor' => $account->saldo
         ];
 
         $response = $this->postJson('/api/transacao', $data);
 
         $response->assertStatus(422)
-        ->assertJsonFragment(['errors' =>'Invalid payment method: '.$randomWord]);
+            ->assertJsonFragment(['errors' => 'Invalid payment method: ' . $randomWord]);
     }
 
 }

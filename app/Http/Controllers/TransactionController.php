@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Services\TransactionService;
 use Illuminate\Support\Facades\Validator;
@@ -29,9 +30,9 @@ class TransactionController extends Controller
                 'conta_id' => 'required|integer',
                 'valor' => 'required|numeric',
             ]);
-    
+
             $response = $this->transactionService->createTransaction($validatedData);
-    
+
             return response()->json($response);
         } catch (\InvalidArgumentException $e) {
             return response()->json(['errors' => $e->getMessage()], $e->getCode());

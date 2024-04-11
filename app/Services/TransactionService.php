@@ -20,14 +20,14 @@ class TransactionService
             if (!$this->isAmountLessThanAccountBalance($data['conta_id'], $data['valor'])) {
                 throw new \InvalidArgumentException('The transaction amount exceeds the account balance.', 422);
             }
-    
+
             $finalAmount = $this->getFinalAmountFeeByPaymentMethod($data['forma_pagamento'], $data['valor']);
-    
+
             $account = Account::where('conta_id', $data['conta_id'])->first();
-    
+
             $account->saldo = $account->saldo - $finalAmount;
             $account->save();
-    
+
             return $account;
         } catch (\InvalidArgumentException $e) {
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode());

@@ -23,10 +23,10 @@ class AccountTest extends TestCase
         $response = $this->postJson('/api/conta', $data);
 
         $response->assertStatus(201)
-        ->assertJson([
-            'conta_id' => $data['conta_id'],
-            'saldo' => $data['valor']
-        ]);
+            ->assertJson([
+                'conta_id' => $data['conta_id'],
+                'saldo' => $data['valor']
+            ]);
 
         $this->assertDatabaseHas('accounts', [
             'conta_id' => $data['conta_id'],
@@ -40,19 +40,19 @@ class AccountTest extends TestCase
 
         $data = [
             'conta_id' => $account->conta_id,
-            'valor' =>  $account->saldo
+            'valor' => $account->saldo
         ];
         $response = $this->postJson('/api/conta', $data);
 
         $response->assertStatus(422)
-        ->assertJsonStructure(['errors' => ['conta_id']])
-        ->assertJsonFragment([
-            'errors' => [
-                'conta_id' => [
-                    'The conta id has already been taken.'
+            ->assertJsonStructure(['errors' => ['conta_id']])
+            ->assertJsonFragment([
+                'errors' => [
+                    'conta_id' => [
+                        'The conta id has already been taken.'
+                    ]
                 ]
-            ]
-        ]);
+            ]);
 
     }
 
@@ -61,19 +61,19 @@ class AccountTest extends TestCase
         $faker = Faker::create();
         $data = [
             'conta_id' => $faker->randomNumber(5),
-            'valor' =>  $faker->randomFloat(2, -1000, -0.01)
+            'valor' => $faker->randomFloat(2, -1000, -0.01)
         ];
         $response = $this->postJson('/api/conta', $data);
 
         $response->assertStatus(422)
-        ->assertJsonStructure(['errors' => ['valor']])
-        ->assertJsonFragment([
-            'errors' => [
-                'valor' => [
-                    'The valor field must be at least 0.'
+            ->assertJsonStructure(['errors' => ['valor']])
+            ->assertJsonFragment([
+                'errors' => [
+                    'valor' => [
+                        'The valor field must be at least 0.'
+                    ]
                 ]
-            ]
-        ]);
+            ]);
 
     }
 
@@ -84,22 +84,22 @@ class AccountTest extends TestCase
         $response = $this->get('/api/conta/?id=' . $account->conta_id);
 
         $response->assertStatus(200)
-        ->assertJson([
-            'conta_id' => $account->conta_id,
-            'saldo' => $account->saldo
-        ]);
+            ->assertJson([
+                'conta_id' => $account->conta_id,
+                'saldo' => $account->saldo
+            ]);
 
     }
 
     public function test_visualize_inexisting_account_with_a_error_response(): void
     {
         $faker = Faker::create();
-        
+
         $response = $this->get('/api/conta/?id=' . $faker->randomNumber(5));
 
         $response->assertStatus(404)
-        ->assertJsonFragment([
-            'errors' => [
+            ->assertJsonFragment([
+                'errors' => [
                     'Account not found'
                 ]
             ]);
